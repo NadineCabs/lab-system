@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Computer Lab System - Login</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="split-container">
+    
+    <!-- LEFT SIDE - BLUE BACKGROUND WITH LOGO -->
+    <div class="left-side">
+      <div class="logo-content">
+        <!-- Add your logo image here -->
+        <div class="logo-circle">
+          <img src="logo.png" alt="Lab Logo" class="logo-img">
+        </div>
+        
+        <h1 class="main-title">COMPUTER LAB SYSTEM</h1>
+        
+        <p class="tagline">
+          We provide a seamless experience for students<br>
+          to access and manage computer laboratory resources.
+        </p>
+        
+        <div class="dots">
+          <span class="dot"></span>
+          <span class="dot"></span>
+          <span class="dot"></span>
+          <span class="dot"></span>
+          <span class="dot"></span>
+        </div>
+      </div>
+    </div>
+
+    <!-- RIGHT SIDE - WHITE FORMS -->
+    <div class="right-side">
+      <div class="form-container">
+        
+        <!-- LOGIN FORM -->
+        <div class="form-box" id="loginBox">
+          <h2 class="form-title">Sign in</h2>
+          <p class="form-subtitle">
+            Don't have an account? 
+            <a href="#" onclick="showRegister()" class="link-primary">Sign up</a>
+          </p>
+          
+          <div class="form-group">
+            <label for="loginUsername">Username</label>
+            <input type="text" id="loginUsername" placeholder="" required>
+          </div>
+
+          <div class="form-group">
+            <label for="loginPassword">Password</label>
+            <input type="password" id="loginPassword" placeholder="" required>
+          </div>
+          
+          <button onclick="login()" class="btn-submit">Log in</button>
+          
+          <p class="message" id="loginMessage"></p>
+        </div>
+
+        <!-- REGISTER FORM -->
+        <div class="form-box hidden" id="registerBox">
+          <h2 class="form-title">Sign up</h2>
+          <p class="form-subtitle">
+            Already have an account? 
+            <a href="#" onclick="showLogin()" class="link-primary">Sign in</a>
+          </p>
+          
+          <div class="form-group">
+            <label for="regFullName">Full Name</label>
+            <input type="text" id="regFullName" placeholder="" required>
+          </div>
+
+          <div class="form-group">
+            <label for="regStudentId">Student ID</label>
+            <input type="text" id="regStudentId" placeholder="" required>
+          </div>
+
+          <div class="form-group">
+            <label for="regUsername">Username</label>
+            <input type="text" id="regUsername" placeholder="" required>
+          </div>
+
+          <div class="form-group">
+            <label for="regPassword">Password</label>
+            <input type="password" id="regPassword" placeholder="" required>
+          </div>
+          
+          <button onclick="register()" class="btn-submit">Create account</button>
+          
+          <p class="message" id="regMessage"></p>
+        </div>
+
+      </div>
+    </div>
+
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>
