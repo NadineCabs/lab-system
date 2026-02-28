@@ -3,61 +3,95 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Computer Lab System - Login</title>
+  <title>CCS | Computer Lab System</title>
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet"/>
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
+
+  <!-- ── NAVBAR ── -->
+  <nav>
+    <div class="nav-inner">
+
+      <a href="#" class="brand">
+        <div class="brand-icon">CCS</div>
+        <div class="brand-text">
+          <span class="brand-title">College of Computer Studies</span>
+          <span class="brand-sub">Sit-in Monitoring System</span>
+        </div>
+      </a>
+
+      <ul class="nav-links">
+        <li><a href="#" class="active">Home</a></li>
+        <li class="dropdown">
+          <a href="#">
+            Community
+            <svg class="chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round">
+              <polyline points="6 9 12 15 18 9"/>
+            </svg>
+          </a>
+        </li>
+        <li><a href="#">About</a></li>
+      </ul>
+
+      <div class="nav-auth">
+        <div class="nav-divider"></div>
+        <a href="#" onclick="showLoginPanel()" class="btn-nav-login">Login</a>
+        <a href="#" onclick="showRegisterPanel()" class="btn-nav-register">Register</a>
+      </div>
+
+      <button class="hamburger" id="hamburger" aria-label="Toggle menu">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+  </nav>
+
+  <!-- Mobile Menu -->
+  <div class="mobile-menu" id="mobileMenu">
+    <a href="#">Home</a>
+    <a href="#">Community</a>
+    <a href="#">About</a>
+    <div class="mobile-auth">
+      <a href="#" onclick="showLoginPanel()" class="btn-nav-login">Login</a>
+      <a href="#" onclick="showRegisterPanel()" class="btn-nav-register">Register</a>
+    </div>
+  </div>
+
+  <!-- ── MAIN CONTENT ── -->
   <div class="split-container">
-    
-    <!-- LEFT SIDE - BLUE BACKGROUND WITH LOGO -->
+
+    <!-- LEFT SIDE -->
     <div class="left-side">
       <div class="logo-content">
-        <!-- Add your logo image here -->
-        <div class="logo-circle">
-          <img src="logo.png" alt="Lab Logo" class="logo-img">
-        </div>
-        
-        <h1 class="main-title">COMPUTER LAB SYSTEM</h1>
-        
-        <p class="tagline">
-          We provide a seamless experience for students<br>
-          to access and manage computer laboratory resources.
-        </p>
-        
-        <div class="dots">
-          <span class="dot"></span>
-          <span class="dot"></span>
-          <span class="dot"></span>
-          <span class="dot"></span>
-          <span class="dot"></span>
-        </div>
+        <img src="ccsmainlogo.png" alt="University of Cebu Logo" class="css-logo"/>
+        <h2 class="left-title">College of Computer Studies</h2>
+        <p class="left-sub">Sit-in Monitoring System</p>
       </div>
     </div>
 
-    <!-- RIGHT SIDE - WHITE FORMS -->
+    <!-- RIGHT SIDE - FORMS -->
     <div class="right-side">
       <div class="form-container">
-        
+
         <!-- LOGIN FORM -->
         <div class="form-box" id="loginBox">
           <h2 class="form-title">Sign in</h2>
           <p class="form-subtitle">
-            Don't have an account? 
+            Don't have an account?
             <a href="#" onclick="showRegister()" class="link-primary">Sign up</a>
           </p>
-          
+
           <div class="form-group">
-            <label for="loginUsername">Username</label>
-            <input type="text" id="loginUsername" placeholder="" required>
+            <label for="loginStudentID">Student ID</label>
+            <input type="text" id="loginStudentID" required>
           </div>
 
           <div class="form-group">
             <label for="loginPassword">Password</label>
-            <input type="password" id="loginPassword" placeholder="" required>
+            <input type="password" id="loginPassword" required>
           </div>
-          
+
           <button onclick="login()" class="btn-submit">Log in</button>
-          
           <p class="message" id="loginMessage"></p>
         </div>
 
@@ -65,32 +99,61 @@
         <div class="form-box hidden" id="registerBox">
           <h2 class="form-title">Sign up</h2>
           <p class="form-subtitle">
-            Already have an account? 
+            Already have an account?
             <a href="#" onclick="showLogin()" class="link-primary">Sign in</a>
           </p>
-          
+
+          <div class="form-group">
+            <label for="regIDnumber">ID number</label>
+            <input type="text" id="regIDnumber" required>
+          </div>
+
+          <div class="form-group">
+            <label for="regLastName">Last Name</label>
+            <input type="text" id="regLastName" required>
+          </div>
+
           <div class="form-group">
             <label for="regFullName">Full Name</label>
-            <input type="text" id="regFullName" placeholder="" required>
+            <input type="text" id="regFullName" required>
           </div>
 
           <div class="form-group">
-            <label for="regStudentId">Student ID</label>
-            <input type="text" id="regStudentId" placeholder="" required>
+            <label for="regMiddleName">Middle Name</label>
+            <input type="text" id="regMiddleName" required>
           </div>
 
           <div class="form-group">
-            <label for="regUsername">Username</label>
-            <input type="text" id="regUsername" placeholder="" required>
+            <label for="regCourseLevel">Course Level</label>
+            <input type="text" id="regCourseLevel" required>
           </div>
 
           <div class="form-group">
             <label for="regPassword">Password</label>
-            <input type="password" id="regPassword" placeholder="" required>
+            <input type="password" id="regPassword" required>
           </div>
-          
+
+          <div class="form-group">
+            <label for="regRepeatPassword">Repeat your password</label>
+            <input type="password" id="regRepeatPassword" required>
+          </div>
+
+          <div class="form-group">
+            <label for="regEmail">Email</label>
+            <input type="text" id="regEmail" required>
+          </div>
+
+          <div class="form-group">
+            <label for="regCourse">Course</label>
+            <input type="text" id="regCourse" required>
+          </div>
+
+          <div class="form-group">
+            <label for="regAddress">Address</label>
+            <input type="text" id="regAddress" required>
+          </div>
+
           <button onclick="register()" class="btn-submit">Create account</button>
-          
           <p class="message" id="regMessage"></p>
         </div>
 
