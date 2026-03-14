@@ -39,18 +39,36 @@ function showRegisterPanel() {
 //  FORMS – Show / Hide
 // ============================================
 function showLogin() {
-  const loginBox    = document.getElementById('loginBox');
-  const registerBox = document.getElementById('registerBox');
+  const loginBox        = document.getElementById('loginBox');
+  const registerBox     = document.getElementById('registerBox');
+  const loginContainer  = document.getElementById('loginContainer');
+  const registerContainer = document.getElementById('registerContainer');
+
   registerBox.classList.add('hidden');
-  setTimeout(() => loginBox.classList.remove('hidden'), 50);
+  registerContainer.classList.add('hidden');
+
+  setTimeout(() => {
+    loginContainer.classList.remove('hidden');
+    loginBox.classList.remove('hidden');
+  }, 50);
+
   clearMessages();
 }
 
 function showRegister() {
-  const loginBox    = document.getElementById('loginBox');
+  const loginBox = document.getElementById('loginBox');
   const registerBox = document.getElementById('registerBox');
+  const loginContainer = document.getElementById('loginContainer');
+  const registerContainer = document.getElementById('registerContainer');
+
   loginBox.classList.add('hidden');
-  setTimeout(() => registerBox.classList.remove('hidden'), 50);
+  loginContainer.classList.add('hidden');
+
+  setTimeout(() => {
+    registerContainer.classList.remove('hidden');
+    registerBox.classList.remove('hidden');
+  }, 50);
+
   clearMessages();
 }
 

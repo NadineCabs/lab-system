@@ -14,10 +14,11 @@
     <div class="nav-inner">
 
       <a href="#" class="brand">
-        <div class="brand-icon">CCS</div>
+        <div class="brand-icon">
+          <img src="ccslogo.png" alt="CCS Logo" />
+        </div>
         <div class="brand-text">
-          <span class="brand-title">College of Computer Studies</span>
-          <span class="brand-sub">Sit-in Monitoring System</span>
+          <span class="brand-title">CompLog</span>
         </div>
       </a>
 
@@ -58,99 +59,117 @@
   </div>
 
   <!-- ── MAIN CONTENT ── -->
-  <div class="split-container">
+  <div class="single-container">
+    <div class="centered-content">
 
-    <!-- LEFT SIDE -->
-    <div class="left-side">
       <div class="logo-content">
-        <img src="ccsmainlogo.png" alt="University of Cebu Logo" class="css-logo"/>
+        <div class="ccs-logo-wrapper">
+          <img src="ccslogo.png" alt="University of Cebu Logo" class="ccs-logo"/>
+        </div>
         <h2 class="left-title">College of Computer Studies</h2>
         <p class="left-sub">Sit-in Monitoring System</p>
       </div>
-    </div>
 
-    <!-- RIGHT SIDE - FORMS -->
-    <div class="right-side">
-      <div class="form-container">
+      <!-- LOGIN CONTAINER -->
+      <div class="form-container" id="loginContainer">
 
         <!-- LOGIN FORM -->
         <div class="form-box" id="loginBox">
-          <h2 class="form-title">Sign in</h2>
+          <h2 class="form-title">Sign In</h2>
           <p class="form-subtitle">
             Don't have an account?
-            <a href="#" onclick="showRegister()" class="link-primary">Sign up</a>
+            <a href="#" onclick="showRegister()" class="link-primary">Sign Up</a>
           </p>
 
-          <div class="form-group">
+          <div class="form-group floating-label">
+            <input type="text" id="loginStudentID" placeholder=" " required>
             <label for="loginStudentID">Student ID</label>
-            <input type="text" id="loginStudentID" required>
           </div>
 
-          <div class="form-group">
+          <div class="form-group floating-label">
+            <input type="password" id="loginPassword" placeholder=" " required>
             <label for="loginPassword">Password</label>
-            <input type="password" id="loginPassword" required>
           </div>
 
-          <button onclick="login()" class="btn-submit">Log in</button>
+          <button onclick="login()" class="btn-submit">Log In</button>
           <p class="message" id="loginMessage"></p>
         </div>
 
+      </div>
+
+      <!-- REGISTER CONTAINER -->
+      <div class="form-container" id="registerContainer">
+
         <!-- REGISTER FORM -->
         <div class="form-box hidden" id="registerBox">
-          <h2 class="form-title">Sign up</h2>
+          <h2 class="form-title">Sign Up</h2>
           <p class="form-subtitle">
             Already have an account?
-            <a href="#" onclick="showLogin()" class="link-primary">Sign in</a>
+            <a href="#" onclick="showLogin()" class="link-primary">Sign In</a>
           </p>
 
-          <div class="form-group">
-            <label for="regIDnumber">ID number</label>
-            <input type="text" id="regIDnumber" required>
+          <div class="form-grid">
+            <div class="form-group floating-label">
+              <input type="text" id="regIDnumber" placeholder=" " required>
+              <label for="regIDnumber">ID Number</label>
+            </div>
+
+            <div class="form-group floating-label">
+              <input type="text" id="regLastName" placeholder=" " required>
+              <label for="regLastName">Last Name</label>
+            </div>
           </div>
 
-          <div class="form-group">
-            <label for="regLastName">Last Name</label>
-            <input type="text" id="regLastName" required>
+          <div class="form-grid">
+            <div class="form-group floating-label">
+              <input type="text" id="regFirstName" placeholder=" " required>
+              <label for="regFirstName">First Name</label>
+            </div>
+
+            <div class="form-group floating-label">
+              <input type="text" id="regMiddleName" placeholder=" " required>
+              <label for="regMiddleName">Middle Name</label>
+            </div>
+          </div>
+         
+            <div class="form-group floating-label">
+              <input type="text" id="regCourse" placeholder=" " required>
+              <label for="regCourse">Course</label>
+            </div>
+
+            <div class="form-group floating-label">
+              <select id="regCourseLevel" class="form-select" required>
+                <option value="">Select Year</option>
+                <option value="1">1</option>
+                <option value="2">2</option>
+                <option value="3">3</option>
+                <option value="4">4</option>
+              </select>
+              <label for="regCourseLevel">Course Level</label>
+            </div>
           </div>
 
-          <div class="form-group">
-            <label for="regFullName">Full Name</label>
-            <input type="text" id="regFullName" required>
+          <div class="form-grid">
+            <div class="form-group floating-label">
+              <input type="password" id="regPassword" placeholder=" " required>
+              <label for="regPassword">Password</label>
+            </div>
+
+            <div class="form-group floating-label">
+              <input type="password" id="regRepeatPassword" placeholder=" " required>
+              <label for="regRepeatPassword">Repeat Password</label>
+            </div>
           </div>
 
-          <div class="form-group">
-            <label for="regMiddleName">Middle Name</label>
-            <input type="text" id="regMiddleName" required>
-          </div>
+           
+            <div class="form-group floating-label">
+              <input type="text" id="regEmail" placeholder=" " required>
+              <label for="regEmail">Email</label>
+            </div>
 
-          <div class="form-group">
-            <label for="regCourseLevel">Course Level</label>
-            <input type="text" id="regCourseLevel" required>
-          </div>
-
-          <div class="form-group">
-            <label for="regPassword">Password</label>
-            <input type="password" id="regPassword" required>
-          </div>
-
-          <div class="form-group">
-            <label for="regRepeatPassword">Repeat your password</label>
-            <input type="password" id="regRepeatPassword" required>
-          </div>
-
-          <div class="form-group">
-            <label for="regEmail">Email</label>
-            <input type="text" id="regEmail" required>
-          </div>
-
-          <div class="form-group">
-            <label for="regCourse">Course</label>
-            <input type="text" id="regCourse" required>
-          </div>
-
-          <div class="form-group">
+          <div class="form-group floating-label">
+            <input type="text" id="regAddress" placeholder=" " required>
             <label for="regAddress">Address</label>
-            <input type="text" id="regAddress" required>
           </div>
 
           <button onclick="register()" class="btn-submit">Create account</button>
@@ -158,8 +177,8 @@
         </div>
 
       </div>
-    </div>
 
+    </div>
   </div>
 
   <script src="script.js"></script>
