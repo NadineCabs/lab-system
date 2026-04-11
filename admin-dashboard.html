@@ -1,0 +1,358 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Admin Dashboard - CCS Sit-In Monitoring System</title>
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&display=swap" rel="stylesheet"/>
+  <link rel="stylesheet" href="css/admin-style.css">
+  <!-- Feather Icons -->
+  <script src="https://unpkg.com/feather-icons"></script>
+</head>
+<body>
+
+  <!-- Sidebar -->
+  <aside class="sidebar" id="sidebar">
+    <div class="sidebar-header">
+      <div class="logo-section">
+        <div class="logo-icon">
+          <img src="ccslogo.png" alt="CCS Logo">
+        </div>
+        <div class="logo-text">
+          <h3>CompLog</h3>
+          <p>Admin Panel</p>
+        </div>
+      </div>
+      <button class="sidebar-toggle" id="sidebarToggle">
+        <i data-feather="x"></i>
+      </button>
+    </div>
+
+    <nav class="sidebar-nav">
+      <a href="#" class="nav-item active">
+        <i data-feather="home"></i>
+        <span>Dashboard</span>
+      </a>
+      
+      <a href="admin-sitin.html" class="nav-item">
+        <i data-feather="log-in"></i>
+        <span>Sit-In</span>
+      </a>
+      
+      <a href="admin-students.html" class="nav-item">
+        <i data-feather="users"></i>
+        <span>Students</span>
+      </a>
+      
+      <a href="admin-records.html" class="nav-item">
+        <i data-feather="book"></i>
+        <span>Sit-In Records</span>
+      </a>
+      
+      <a href="admin-reports.html" class="nav-item">
+        <i data-feather="bar-chart-2"></i>
+        <span>Reports</span>
+      </a>
+      
+      <div class="nav-divider"></div>
+      
+      <a href="admin-users.html" class="nav-item">
+        <i data-feather="user-check"></i>
+        <span>User Management</span>
+      </a>
+      
+      <a href="admin-logs.html" class="nav-item">
+        <i data-feather="activity"></i>
+        <span>Activity Logs</span>
+      </a>
+      
+      <a href="admin-announcements.html" class="nav-item">
+        <i data-feather="bell"></i>
+        <span>Announcements</span>
+      </a>
+      
+      <a href="admin-feedback.html" class="nav-item">
+        <i data-feather="message-circle"></i>
+        <span>Feedback</span>
+      </a>
+      
+      <a href="admin-settings.html" class="nav-item">
+        <i data-feather="settings"></i>
+        <span>Settings</span>
+      </a>
+    </nav>
+
+    <div class="sidebar-footer">
+      <div class="user-info">
+        <div class="user-avatar">
+          <i data-feather="user"></i>
+        </div>
+        <div class="user-details">
+          <p class="user-name">Admin User</p>
+          <p class="user-role">Administrator</p>
+        </div>
+      </div>
+    </div>
+  </aside>
+
+  <!-- Main Content -->
+  <div class="main-content">
+    
+    <!-- Top Navbar -->
+    <header class="top-navbar">
+      <button class="mobile-toggle" id="mobileToggle">
+        <i data-feather="menu"></i>
+      </button>
+      
+      <div class="navbar-search">
+        <i data-feather="search"></i>
+        <input type="text" placeholder="Search students, records..." id="globalSearch">
+      </div>
+
+      <div class="navbar-right">
+        <button class="icon-btn" id="notificationBtn">
+          <i data-feather="bell"></i>
+          <span class="badge">3</span>
+        </button>
+        
+        <div class="user-menu">
+          <button class="user-btn" id="userMenuBtn">
+            <img src="ccslogo.png" alt="Admin" class="user-img">
+            <span class="user-name-nav">Admin</span>
+            <i data-feather="chevron-down"></i>
+          </button>
+          
+          <div class="user-dropdown" id="userDropdown">
+            <a href="#"><i data-feather="user"></i> Profile</a>
+            <a href="#"><i data-feather="settings"></i> Settings</a>
+            <div class="dropdown-divider"></div>
+            <a href="#" class="logout-btn"><i data-feather="log-out"></i> Logout</a>
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <!-- Dashboard Content -->
+    <div class="content-wrapper">
+      
+      <!-- Page Header -->
+      <div class="page-header">
+        <div>
+          <h1>Dashboard</h1>
+          <p>Welcome back! Here's what's happening today.</p>
+        </div>
+        <button class="btn-primary">
+          <i data-feather="download"></i>
+          Export Report
+        </button>
+      </div>
+
+      <!-- Search Results -->
+      <div class="search-results" id="searchResults" style="display: none; margin-bottom: var(--spacing);">
+        <div class="results-header">
+          <h4>Search Results</h4>
+          <span id="resultsCount">0 students found</span>
+        </div>
+
+        <div id="searchLoading" class="search-loading" style="display: none;">
+          <div class="spinner"></div>
+          <p>Searching for students...</p>
+        </div>
+
+        <div id="searchEmpty" class="search-empty" style="display: none;">
+          <div class="empty-icon"><i data-feather="search"></i></div>
+          <h4>No students found</h4>
+          <p id="emptyMessage">Try searching by student ID, name, or email.</p>
+        </div>
+
+        <div class="table-responsive">
+          <table class="students-table" id="resultsTable" style="display: none;">
+            <thead>
+              <tr>
+                <th>ID Number</th>
+                <th>Name</th>
+                <th>Course / Year</th>
+                <th>Email</th>
+                <th>Completed Sessions</th>
+                <th>Remaining Sessions</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody id="resultsTableBody"></tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- Stats Cards -->
+      <div class="stats-grid">
+        <div class="stat-card card-blue">
+          <div class="stat-icon">
+            <i data-feather="users"></i>
+          </div>
+          <div class="stat-content">
+            <h3 id="studentsRegisteredCount">0</h3>
+            <p>Students Registered</p>
+          </div>
+          <div class="stat-change positive">
+            <i data-feather="trending-up"></i>
+            <span>+12%</span>
+          </div>
+        </div>
+
+        <div class="stat-card card-green">
+          <div class="stat-icon">
+            <i data-feather="log-in"></i>
+          </div>
+          <div class="stat-content">
+            <h3 id="currentSitInCount">0</h3>
+            <p>Currently Sit-In</p>
+          </div>
+          <div class="stat-change">
+            <i data-feather="activity"></i>
+            <span>Live</span>
+          </div>
+        </div>
+
+        <div class="stat-card card-purple">
+          <div class="stat-icon">
+            <i data-feather="calendar"></i>
+          </div>
+          <div class="stat-content">
+            <h3 id="sitInTodayCount">0</h3>
+            <p>Total Sit-In Today</p>
+          </div>
+          <div class="stat-change negative">
+            <i data-feather="trending-down"></i>
+            <span>-</span>
+          </div>
+        </div>
+
+        <div class="stat-card card-gold">
+          <div class="stat-icon">
+            <i data-feather="clock"></i>
+          </div>
+          <div class="stat-content">
+            <h3 id="avgSessionsCount">0</h3>
+            <p>Avg. Sessions/Student</p>
+          </div>
+          <div class="stat-change positive">
+            <i data-feather="trending-up"></i>
+            <span>+8%</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Charts Row -->
+      <div class="charts-row">
+        
+        <!-- Course Distribution Chart -->
+        <div class="card chart-card">
+          <div class="card-header">
+            <h3><i data-feather="pie-chart"></i> Student Distribution by Course</h3>
+            <button class="btn-icon"><i data-feather="more-vertical"></i></button>
+          </div>
+          <div class="chart-container">
+            <canvas id="courseChart"></canvas>
+          </div>
+          <div class="chart-legend" id="courseChartLegend"></div>
+        </div>
+
+        <!-- Activity Timeline -->
+        <div class="card timeline-card">
+          <div class="card-header">
+            <h3><i data-feather="activity"></i> Recent Activity</h3>
+            <a href="admin-logs.html" class="link-primary">View All</a>
+          </div>
+          <div class="timeline">
+            <div class="timeline-item">
+              <div class="timeline-icon green">
+                <i data-feather="log-in"></i>
+              </div>
+            </div>
+            <div class="timeline-item">
+              <div class="timeline-icon blue">
+                <i data-feather="user-plus"></i>
+              </div>
+            </div>
+            <div class="timeline-item">
+              <div class="timeline-icon orange">
+                <i data-feather="log-out"></i>
+              </div>
+            </div>
+            <div class="timeline-item">
+              <div class="timeline-icon purple">
+                <i data-feather="bell"></i>
+              </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- Tables Row -->
+      <div class="tables-row">
+        
+        <!-- Current Sit-In Table -->
+        <div class="card table-card">
+          <div class="card-header">
+            <h3 id="currentSitInHeader"><i data-feather="users"></i> Currently Sit-In (0)</h3>
+            <button class="btn-secondary" id="refreshDashboardBtn">Refresh</button>
+          </div>
+          <div class="table-responsive">
+            <table class="data-table">
+              <thead>
+                <tr>
+                  <th>ID Number</th>
+                  <th>Name</th>
+                  <th>Purpose</th>
+                  <th>Lab</th>
+                  <th>Time In</th>
+                  <th>Status</th>
+                </tr>
+              </thead>
+              <tbody id="currentSitInTableBody">
+                <tr id="currentSitInEmptyRow">
+                  <td colspan="6" class="empty-state">
+                    <i data-feather="inbox"></i>
+                    <p>No students currently sit-in</p>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- Recent Announcements -->
+        <div class="card announcements-card">
+          <div class="card-header">
+            <h3><i data-feather="bell"></i> Announcements</h3>
+            <button class="btn-primary-sm" onclick="window.location.href='admin-announcements.html'">
+              <i data-feather="plus"></i> New
+            </button>
+          </div>
+          <div class="announcements-list" id="adminAnnouncementsList">
+            <div class="announcement-item">
+              <div class="announcement-content">
+                <h4>Loading latest announcements...</h4>
+                <p>Announcements will appear here once they are published.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+    </div>
+
+  </div>
+
+  <!-- Chart.js -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <script src="js/admin-script.js"></script>
+  <script>
+    // Initialize Feather Icons
+    feather.replace();
+  </script>
+</body>
+</html>

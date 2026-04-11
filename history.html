@@ -1,0 +1,588 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Session History - CCS Sit-In Monitoring</title>
+  <link rel="stylesheet" href="../css/dashboard-student-style.css">
+  <!-- Feather Icons -->
+  <script src="https://unpkg.com/feather-icons"></script>
+  <style>
+    .history-container {
+      padding: 20px;
+    }
+
+    .history-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 20px;
+    }
+
+    .history-header h1 {
+      color: #333;
+      font-size: 28px;
+      margin: 0;
+    }
+
+    .refresh-btn {
+      background: linear-gradient(135deg, #703081 0%, #a00080 100%);
+      color: white;
+      border: none;
+      padding: 10px 20px;
+      border-radius: 6px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-weight: 500;
+      transition: transform 0.2s;
+    }
+
+    .refresh-btn:hover {
+      transform: scale(1.05);
+    }
+
+    .history-stats {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 15px;
+      margin-bottom: 25px;
+    }
+
+    .stat-card {
+      background: white;
+      border: 1px solid #e0e0e0;
+      border-radius: 8px;
+      padding: 20px;
+      text-align: center;
+    }
+
+    .stat-value {
+      font-size: 28px;
+      font-weight: bold;
+      color: #703081;
+      margin: 10px 0;
+    }
+
+    .stat-label {
+      font-size: 14px;
+      color: #666;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+
+    .table-responsive {
+      overflow-x: auto;
+      background: white;
+      border-radius: 8px;
+      border: 1px solid #e0e0e0;
+      margin-bottom: 20px;
+    }
+
+    .history-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 14px;
+    }
+
+    .history-table thead {
+      background: #f5f5f5;
+      border-bottom: 2px solid #703081;
+    }
+
+    .history-table th {
+      padding: 15px;
+      text-align: left;
+      font-weight: 600;
+      color: #333;
+    }
+
+    .history-table td {
+      padding: 15px;
+      border-bottom: 1px solid #e0e0e0;
+    }
+
+    .history-table tbody tr:hover {
+      background-color: #fafafa;
+    }
+
+    .status-badge {
+      display: inline-block;
+      padding: 4px 12px;
+      border-radius: 20px;
+      font-size: 12px;
+      font-weight: 600;
+      text-transform: uppercase;
+    }
+
+    .status-completed {
+      background-color: #d4edda;
+      color: #155724;
+    }
+
+    .status-active {
+      background-color: #fff3cd;
+      color: #856404;
+    }
+
+    .empty-state {
+      text-align: center;
+      padding: 60px 20px;
+      color: #999;
+    }
+
+    .empty-state svg {
+      width: 80px;
+      height: 80px;
+      margin-bottom: 20px;
+      opacity: 0.5;
+    }
+
+    .empty-state h3 {
+      color: #666;
+      margin-bottom: 10px;
+    }
+
+    .loading-state {
+      text-align: center;
+      padding: 40px;
+    }
+
+    .loading-spinner {
+      display: inline-block;
+      width: 40px;
+      height: 40px;
+      border: 4px solid #f3f3f3;
+      border-top: 4px solid #703081;
+      border-radius: 50%;
+      animation: spin 1s linear infinite;
+    }
+
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+
+    .pagination {
+      display: flex;
+      justify-content: center;
+      gap: 10px;
+      margin-top: 20px;
+    }
+
+    .pagination button {
+      background: white;
+      border: 1px solid #ddd;
+      padding: 8px 12px;
+      border-radius: 4px;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .pagination button:hover:not(:disabled) {
+      background: #f0f0f0;
+      border-color: #703081;
+    }
+
+    .pagination button:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+    }
+
+    .back-link {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      color: #703081;
+      text-decoration: none;
+      margin-bottom: 20px;
+      font-weight: 500;
+      transition: color 0.2s;
+    }
+
+    .back-link:hover {
+      color: #a00080;
+    }
+
+    .content-wrapper {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 20px;
+    }
+  </style>
+</head>
+<body>
+  <!-- Top Navigation Bar -->
+  <nav class="top-nav">
+    <div class="nav-container">
+      <div class="nav-left">
+        <h2>Session History</h2>
+      </div>
+      <div class="nav-right">
+        <a href="dashboard.html" class="nav-link">
+          <i data-feather="home"></i>
+          <span>Home</span>
+        </a>
+        
+        <a href="#" onclick="openEditProfileModal(); return false;" class="nav-link">
+          <i data-feather="user"></i>
+          <span>Edit Profile</span>
+        </a>
+        
+        <a href="history.html" class="nav-link">
+          <i data-feather="clock"></i>
+          <span>History</span>
+        </a>
+        
+        <a href="reservation.html" class="nav-link">
+          <i data-feather="calendar"></i>
+          <span>Reservation</span>
+        </a>
+        
+        <button onclick="logout()" class="btn-logout">
+          <i data-feather="log-out"></i>
+          <span>Log out</span>
+        </button>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Main Content -->
+  <div class="content-wrapper">
+    <a href="dashboard.html" class="back-link">
+      <i data-feather="arrow-left"></i>
+      Back to Dashboard
+    </a>
+
+    <div class="history-header">
+      <h1>My Session History</h1>
+      <button class="refresh-btn" onclick="loadHistory()">
+        <i data-feather="refresh-cw"></i>
+        Refresh
+      </button>
+    </div>
+
+    <!-- Statistics -->
+    <div class="history-stats" id="statsContainer">
+      <div class="stat-card">
+        <div class="stat-label">Total Sessions</div>
+        <div class="stat-value" id="totalSessions">-</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-label">Total Time</div>
+        <div class="stat-value" id="totalTime">-</div>
+      </div>
+    </div>
+
+    <!-- History Table -->
+    <div id="historyContainer">
+      <div class="loading-state">
+        <div class="loading-spinner"></div>
+        <p>Loading your session history...</p>
+      </div>
+    </div>
+
+    <!-- Pagination -->
+    <div class="pagination" id="paginationContainer" style="display: none;">
+      <button id="prevBtn" onclick="previousPage()" disabled>
+        <i data-feather="chevron-left"></i> Previous
+      </button>
+      <span id="pageInfo"></span>
+      <button id="nextBtn" onclick="nextPage()">
+        Next <i data-feather="chevron-right"></i>
+      </button>
+    </div>
+  </div>
+
+  <!-- Edit Profile Modal (shared from dashboard) -->
+  <div class="edit-profile-modal" id="editProfileModal">
+    <div class="modal-overlay" onclick="closeEditProfileModal()"></div>
+    <div class="modal-container">
+      <div class="modal-header">
+        <h2>Edit your profile</h2>
+        <button class="modal-close" onclick="closeEditProfileModal()">
+          <i data-feather="x"></i>
+        </button>
+      </div>
+      <div class="modal-body">
+        <form id="editProfileForm">
+          <div class="form-group">
+            <label>Full name</label>
+            <input type="text" id="modalFullName" placeholder="Enter your full name" required>
+          </div>
+          <div class="form-group">
+            <label>Email</label>
+            <input type="email" id="modalEmail" placeholder="your@email.com" required>
+          </div>
+          <div class="form-group">
+            <label>Address</label>
+            <textarea id="modalAddress" rows="2" placeholder="Enter your address" required></textarea>
+          </div>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn-close-modal" onclick="closeEditProfileModal()">Close</button>
+        <button type="button" class="btn-save-modal" onclick="saveProfileChanges()">Save changes</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Logout Confirmation Modal -->
+  <div class="logout-modal" id="logoutModal">
+    <div class="logout-overlay" onclick="closeLogoutModal()"></div>
+    <div class="logout-container">
+      <div class="logout-icon">
+        <i data-feather="log-out"></i>
+      </div>
+      <h2 class="logout-message">Are you sure you want to logout?</h2>
+      <p class="logout-submessage">You'll need to sign in again to access your account.</p>
+      <div class="logout-buttons">
+        <button class="btn-cancel-logout" onclick="closeLogoutModal()">
+          <i data-feather="x"></i> Cancel
+        </button>
+        <button class="btn-confirm-logout" onclick="confirmLogout()">
+          <i data-feather="log-out"></i> Yes, Logout
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // Check authentication
+    const user = JSON.parse(sessionStorage.getItem('user') || 'null');
+    if (!user || user.role !== 'student') {
+      window.location.href = 'index.html';
+    }
+
+    let currentPage = 0;
+    const recordsPerPage = 10;
+
+    // Load history on page load
+    document.addEventListener('DOMContentLoaded', () => {
+      loadHistory();
+      feather.replace();
+    });
+
+    async function loadHistory() {
+      const container = document.getElementById('historyContainer');
+      const offset = currentPage * recordsPerPage;
+
+      try {
+        container.innerHTML = `
+          <div class="loading-state">
+            <div class="loading-spinner"></div>
+            <p>Loading your session history...</p>
+          </div>
+        `;
+
+        const response = await fetch(`api-get-student-history.php?limit=${recordsPerPage}&offset=${offset}`);
+        const data = await response.json();
+
+        if (!data.success) {
+          container.innerHTML = `
+            <div class="empty-state">
+              <h3>Unable to load history</h3>
+              <p>${data.message || 'Please try again later.'}</p>
+            </div>
+          `;
+          return;
+        }
+
+        // Update statistics
+        document.getElementById('totalSessions').textContent = data.total;
+        const totalMinutes = data.records.reduce((sum, r) => sum + (r.duration_minutes || 0), 0);
+        document.getElementById('totalTime').textContent = formatDuration(totalMinutes);
+
+        if (data.records.length === 0) {
+          container.innerHTML = `
+            <div class="empty-state">
+              <i data-feather="inbox"></i>
+              <h3>No session history yet</h3>
+              <p>You haven't completed any sit-in sessions yet.</p>
+            </div>
+          `;
+          document.getElementById('paginationContainer').style.display = 'none';
+          feather.replace();
+          return;
+        }
+
+        // Build table
+        let html = `
+          <div class="table-responsive">
+            <table class="history-table">
+              <thead>
+                <tr>
+                  <th>Date</th>
+                  <th>Lab/Computer</th>
+                  <th>Purpose</th>
+                  <th>Duration</th>
+                  <th>Rating</th>
+                  <th>Feedback</th>
+                </tr>
+              </thead>
+              <tbody>
+        `;
+
+        data.records.forEach(record => {
+          const date = new Date(record.recorded_at);
+          const stars = record.rating ? '⭐'.repeat(record.rating) : 'No rating';
+          const feedback = record.feedback_text || '-';
+          const concerns = record.concerns ? ` | Concerns: ${record.concerns}` : '';
+
+          html += `
+            <tr>
+              <td>${date.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}</td>
+              <td>${record.computer_number || 'N/A'}</td>
+              <td>${record.purpose || 'No purpose specified'}</td>
+              <td>${record.duration_minutes ? record.duration_minutes + ' min' : 'N/A'}</td>
+              <td>${stars}</td>
+              <td>${feedback}${concerns}</td>
+            </tr>
+          `;
+        });
+
+        html += `
+              </tbody>
+            </table>
+          </div>
+        `;
+
+        container.innerHTML = html;
+
+        // Update pagination
+        const totalPages = Math.ceil(data.total / recordsPerPage);
+        if (totalPages > 1) {
+          document.getElementById('paginationContainer').style.display = 'flex';
+          document.getElementById('pageInfo').textContent = `Page ${currentPage + 1} of ${totalPages}`;
+          document.getElementById('prevBtn').disabled = currentPage === 0;
+          document.getElementById('nextBtn').disabled = !data.hasMore;
+        } else {
+          document.getElementById('paginationContainer').style.display = 'none';
+        }
+
+        feather.replace();
+      } catch (error) {
+        console.error('Error loading history:', error);
+        container.innerHTML = `
+          <div class="empty-state">
+            <h3>Error loading history</h3>
+            <p>Please refresh the page and try again.</p>
+          </div>
+        `;
+      }
+    }
+
+    function formatDuration(minutes) {
+      if (!minutes) return '0 mins';
+      const hours = Math.floor(minutes / 60);
+      const mins = minutes % 60;
+      if (hours === 0) return mins + ' mins';
+      return hours + 'h ' + mins + ' mins';
+    }
+
+    function previousPage() {
+      if (currentPage > 0) {
+        currentPage--;
+        loadHistory();
+        window.scrollTo(0, 0);
+      }
+    }
+
+    function nextPage() {
+      currentPage++;
+      loadHistory();
+      window.scrollTo(0, 0);
+    }
+
+    // Profile Modal Functions
+    function openEditProfileModal() {
+      document.getElementById('editProfileModal').classList.add('show');
+      loadModalUserData();
+      setTimeout(() => feather.replace(), 100);
+    }
+
+    function closeEditProfileModal() {
+      document.getElementById('editProfileModal').classList.remove('show');
+    }
+
+    function loadModalUserData() {
+      const user = JSON.parse(sessionStorage.getItem('user'));
+      const fullName = `${user.first_name || ''} ${user.middle_name || ''} ${user.last_name || ''}`.trim();
+      document.getElementById('modalFullName').value = fullName;
+      document.getElementById('modalEmail').value = user.email || '';
+      document.getElementById('modalAddress').value = user.address || '';
+    }
+
+    async function saveProfileChanges() {
+      const user = JSON.parse(sessionStorage.getItem('user'));
+      const fullName = document.getElementById('modalFullName').value.trim();
+      const email = document.getElementById('modalEmail').value.trim();
+      const address = document.getElementById('modalAddress').value.trim();
+
+      if (!fullName || !email || !address) {
+        alert('Please fill all required fields');
+        return;
+      }
+
+      const nameParts = fullName.split(' ');
+      const firstName = nameParts[0] || '';
+      const lastName = nameParts[nameParts.length - 1] || '';
+      const middleName = nameParts.slice(1, -1).join(' ') || '';
+
+      try {
+        const response = await fetch('update-profile.php', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            user_id: user.id,
+            first_name: firstName,
+            middle_name: middleName,
+            last_name: lastName,
+            email: email,
+            address: address
+          })
+        });
+
+        const data = await response.json();
+        if (data.success) {
+          user.first_name = firstName;
+          user.middle_name = middleName;
+          user.last_name = lastName;
+          user.email = email;
+          user.address = address;
+          sessionStorage.setItem('user', JSON.stringify(user));
+          closeEditProfileModal();
+          alert('Profile updated successfully!');
+        } else {
+          alert(data.message || 'Failed to update profile');
+        }
+      } catch (error) {
+        alert('Connection error. Please try again.');
+      }
+    }
+
+    // Logout Functions
+    function logout() {
+      document.getElementById('logoutModal').classList.add('show');
+      setTimeout(() => feather.replace(), 100);
+    }
+
+    function closeLogoutModal() {
+      document.getElementById('logoutModal').classList.remove('show');
+    }
+
+    function confirmLogout() {
+      fetch('logout.php', { method: 'POST' })
+        .then(() => {
+          sessionStorage.removeItem('user');
+          window.location.href = 'index.html';
+        })
+        .catch(() => {
+          sessionStorage.removeItem('user');
+          window.location.href = 'index.html';
+        });
+    }
+  </script>
+</body>
+</html>

@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Sit-In Management - CCS Sit-In Monitoring System</title>
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&display=swap" rel="stylesheet"/>
+  <link rel="stylesheet" href="css/admin-style.css">
+  <script src="https://unpkg.com/feather-icons"></script>
+</head>
+<body>
+
+  <!-- Sidebar -->
+  <aside class="sidebar" id="sidebar">
+    <div class="sidebar-header">
+      <div class="logo-section">
+        <div class="logo-icon">
+          <img src="ccslogo.png" alt="CCS Logo">
+        </div>
+        <div class="logo-text">
+          <h3>CompLog</h3>
+          <p>Admin Panel</p>
+        </div>
+      </div>
+      <button class="sidebar-toggle" id="sidebarToggle">
+        <i data-feather="x"></i>
+      </button>
+    </div>
+
+    <nav class="sidebar-nav">
+      <a href="admin-dashboard.html" class="nav-item">
+        <i data-feather="home"></i>
+        <span>Dashboard</span>
+      </a>
+      <a href="admin-sitin.html" class="nav-item active">
+        <i data-feather="log-in"></i>
+        <span>Sit-In</span>
+      </a>
+      <a href="admin-students.html" class="nav-item">
+        <i data-feather="users"></i>
+        <span>Students</span>
+      </a>
+      <a href="admin-records.html" class="nav-item">
+        <i data-feather="book"></i>
+        <span>Sit-In Records</span>
+      </a>
+      <a href="admin-reports.html" class="nav-item">
+        <i data-feather="bar-chart-2"></i>
+        <span>Reports</span>
+      </a>
+      <div class="nav-divider"></div>
+      <a href="admin-users.html" class="nav-item">
+        <i data-feather="user-check"></i>
+        <span>User Management</span>
+      </a>
+      <a href="admin-logs.html" class="nav-item">
+        <i data-feather="activity"></i>
+        <span>Activity Logs</span>
+      </a>
+      <a href="admin-announcements.html" class="nav-item">
+        <i data-feather="bell"></i>
+        <span>Announcements</span>
+      </a>
+      <a href="admin-feedback.html" class="nav-item">
+        <i data-feather="message-circle"></i>
+        <span>Feedback</span>
+      </a>
+      <a href="admin-settings.html" class="nav-item">
+        <i data-feather="settings"></i>
+        <span>Settings</span>
+      </a>
+    </nav>
+
+    <div class="sidebar-footer">
+      <div class="user-info">
+        <div class="user-avatar">
+          <i data-feather="user"></i>
+        </div>
+        <div class="user-details">
+          <p class="user-name">Admin User</p>
+          <p class="user-role">Administrator</p>
+        </div>
+      </div>
+    </div>
+  </aside>
+
+  <!-- Main Content -->
+  <div class="main-content">
+    <!-- Top Navbar -->
+    <header class="top-navbar">
+      <button class="mobile-toggle" id="mobileToggle">
+        <i data-feather="menu"></i>
+      </button>
+      <div class="navbar-search">
+        <i data-feather="search"></i>
+        <input type="text" placeholder="Search students, records..." id="globalSearch">
+      </div>
+      <div class="navbar-right">
+        <button class="icon-btn" id="notificationBtn">
+          <i data-feather="bell"></i>
+          <span class="badge">3</span>
+        </button>
+        <div class="user-menu">
+          <button class="user-btn" id="userMenuBtn">
+            <img src="ccslogo.png" alt="Admin" class="user-img">
+            <span class="user-name-nav">Admin</span>
+            <i data-feather="chevron-down"></i>
+          </button>
+          <div class="user-dropdown" id="userDropdown">
+            <a href="#"><i data-feather="user"></i> Profile</a>
+            <a href="#"><i data-feather="settings"></i> Settings</a>
+            <div class="dropdown-divider"></div>
+            <a href="logout.php" class="logout-btn"><i data-feather="log-out"></i> Logout</a>
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <!-- Content Wrapper -->
+    <div class="content-wrapper">
+      <!-- Page Header -->
+      <div class="page-header">
+        <div>
+          <h1>Sit-In Management</h1>
+          <p>Initiate and manage student sit-in sessions</p>
+        </div>
+        <button class="btn-primary" id="refreshBtn">
+          <i data-feather="refresh-cw"></i>
+          Refresh
+        </button>
+      </div>
+
+      <!-- Initiate Session Card -->
+      <div class="card" style="margin-bottom: 24px;">
+        <div class="card-header">
+          <h3><i data-feather="log-in"></i> Initiate New Session</h3>
+        </div>
+        <div class="card-body">
+          <form id="initiateSessionForm">
+            <div class="form-row">
+              <div class="form-group">
+                <label for="studentSelect">Select Student</label>
+                <select id="studentSelect" class="form-control" required>
+                  <option value="">-- Choose a student --</option>
+                </select>
+              </div>
+              <div class="form-group">
+                <label for="computerNumber">Computer Number</label>
+                <input 
+                  type="text" 
+                  id="computerNumber" 
+                  class="form-control" 
+                  placeholder="e.g., LAB-01, PC-15"
+                  required
+                >
+              </div>
+            </div>
+            <div class="form-row">
+              <div class="form-group">
+                <label for="sessionPurpose">Purpose (Optional)</label>
+                <input 
+                  type="text" 
+                  id="sessionPurpose" 
+                  class="form-control"
+                  placeholder="e.g., Programming Assignment, Lab Work"
+                >
+              </div>
+            </div>
+            <div class="form-row">
+              <button type="submit" class="btn-primary">
+                <i data-feather="play-circle"></i> Start Session
+              </button>
+              <div id="initiateStatus" style="margin-top: 16px; font-size: 14px;"></div>
+            </div>
+          </form>
+        </div>
+      </div>
+
+      <!-- Active Sessions Card -->
+      <div class="card">
+        <div class="card-header">
+          <h3><i data-feather="activity"></i> Active Sessions</h3>
+          <span style="font-size: 14px; color: #666;">
+            <span id="activeSessions">0</span> sessions running
+          </span>
+        </div>
+        <div class="card-body">
+          <div id="activeSessionsList" class="sessions-list">
+            <div class="empty-state">
+              <i data-feather="inbox"></i>
+              <p>No active sessions at the moment</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="js/admin-script.js"></script>
+  <script src="js/sitin-management.js"></script>
+  <script>
+    feather.replace();
+  </script>
+</body>
+</html>

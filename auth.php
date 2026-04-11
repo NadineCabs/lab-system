@@ -22,9 +22,8 @@ if ($action === 'login') {
     }
 
     try {
-        // Find user
-        $stmt = $conn->prepare("SELECT id, username, password, full_name, student_id, role FROM users WHERE username = :username");
-        $stmt->execute(['username' => $username]);
+        $stmt = $conn->prepare("SELECT id, id_number, password, first_name, last_name, role FROM users WHERE id_number = :id_number");
+        $stmt->execute(['id_number' => $username]);
         
         if ($stmt->rowCount() === 0) {
             echo json_encode([

@@ -1,0 +1,608 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Reservation Approvals - Admin Dashboard</title>
+  <link rel="stylesheet" href="../css/admin-style.css">
+  <script src="https://unpkg.com/feather-icons"></script>
+  <style>
+    .approval-container {
+      padding: 20px;
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+
+    .page-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 30px;
+    }
+
+    .page-header h1 {
+      color: #333;
+      font-size: 28px;
+      margin: 0;
+    }
+
+    .refresh-btn {
+      background: #703081;
+      color: white;
+      border: none;
+      padding: 12px 24px;
+      border-radius: 6px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-weight: 600;
+      transition: transform 0.2s;
+    }
+
+    .refresh-btn:hover {
+      transform: scale(1.05);
+    }
+
+    .filters {
+      display: flex;
+      gap: 15px;
+      margin-bottom: 20px;
+      flex-wrap: wrap;
+    }
+
+    .filter-btn {
+      background: white;
+      border: 2px solid #ddd;
+      padding: 10px 16px;
+      border-radius: 6px;
+      cursor: pointer;
+      font-weight: 600;
+      transition: all 0.2s;
+    }
+
+    .filter-btn.active {
+      background: #703081;
+      color: white;
+      border-color: #703081;
+    }
+
+    .reservation-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+      gap: 20px;
+    }
+
+    .reservation-card {
+      background: white;
+      border: 1px solid #e0e0e0;
+      border-radius: 8px;
+      padding: 20px;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+    }
+
+    .card-student-info {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 15px;
+      padding-bottom: 15px;
+      border-bottom: 1px solid #e0e0e0;
+    }
+
+    .student-avatar {
+      width: 50px;
+      height: 50px;
+      border-radius: 50%;
+      background: #703081;
+      color: white;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: bold;
+    }
+
+    .student-details {
+      flex: 1;
+    }
+
+    .student-name {
+      font-weight: 600;
+      color: #333;
+    }
+
+    .student-id {
+      font-size: 12px;
+      color: #999;
+    }
+
+    .status-badge {
+      display: inline-block;
+      padding: 6px 12px;
+      border-radius: 20px;
+      font-size: 12px;
+      font-weight: 600;
+      text-transform: uppercase;
+    }
+
+    .status-pending {
+      background-color: #fff3cd;
+      color: #856404;
+    }
+
+    .status-approved {
+      background-color: #d4edda;
+      color: #155724;
+    }
+
+    .status-rejected {
+      background-color: #f8d7da;
+      color: #721c24;
+    }
+
+    .card-details {
+      margin-bottom: 15px;
+      font-size: 14px;
+    }
+
+    .detail-row {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 10px;
+      padding: 8px 0;
+    }
+
+    .detail-label {
+      font-weight: 600;
+      color: #333;
+    }
+
+    .detail-value {
+      color: #666;
+    }
+
+    .action-buttons {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+      margin-top: 15px;
+    }
+
+    .btn-approve {
+      background: #28a745;
+      color: white;
+      border: none;
+      padding: 10px;
+      border-radius: 6px;
+      cursor: pointer;
+      font-weight: 600;
+      transition: background 0.2s;
+    }
+
+    .btn-approve:hover {
+      background: #218838;
+    }
+
+    .btn-reject {
+      background: #dc3545;
+      color: white;
+      border: none;
+      padding: 10px;
+      border-radius: 6px;
+      cursor: pointer;
+      font-weight: 600;
+      transition: background 0.2s;
+    }
+
+    .btn-reject:hover {
+      background: #c82333;
+    }
+
+    .empty-state {
+      text-align: center;
+      padding: 60px 20px;
+      color: #999;
+    }
+
+    .empty-state h3 {
+      color: #666;
+      margin-bottom: 10px;
+    }
+
+    .loading-spinner {
+      display: inline-block;
+      width: 40px;
+      height: 40px;
+      border: 4px solid #f3f3f3;
+      border-top: 4px solid #703081;
+      border-radius: 50%;
+      animation: spin 1s linear infinite;
+    }
+
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+
+    .loading-state {
+      text-align: center;
+      padding: 40px;
+    }
+
+    /* Modal */
+    .modal {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.5);
+      z-index: 1000;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .modal.show {
+      display: flex;
+    }
+
+    .modal-content {
+      background: white;
+      border-radius: 8px;
+      padding: 30px;
+      max-width: 500px;
+      width: 90%;
+      box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+    }
+
+    .modal-header {
+      font-size: 22px;
+      font-weight: 600;
+      margin-bottom: 20px;
+    }
+
+    .form-group {
+      margin-bottom: 20px;
+    }
+
+    .form-group label {
+      display: block;
+      font-weight: 600;
+      margin-bottom: 8px;
+      color: #333;
+    }
+
+    .form-group textarea {
+      width: 100%;
+      padding: 12px;
+      border: 1px solid #ddd;
+      border-radius: 6px;
+      font-size: 14px;
+      font-family: inherit;
+      resize: vertical;
+      min-height: 100px;
+    }
+
+    .modal-footer {
+      display: flex;
+      gap: 10px;
+      justify-content: flex-end;
+      margin-top: 25px;
+    }
+
+    .btn-modal {
+      padding: 12px 24px;
+      border: 1px solid #ddd;
+      border-radius: 6px;
+      cursor: pointer;
+      font-weight: 600;
+    }
+
+    .btn-modal-reject {
+      background: #dc3545;
+      color: white;
+      border-color: #dc3545;
+    }
+
+    .btn-modal-reject:hover {
+      background: #c82333;
+    }
+
+    .btn-modal-cancel {
+      background: white;
+      color: #333;
+    }
+
+    .btn-modal-cancel:hover {
+      background: #f5f5f5;
+    }
+
+    .message {
+      padding: 12px;
+      border-radius: 6px;
+      margin-bottom: 20px;
+      display: none;
+    }
+
+    .message.success {
+      background: #d4edda;
+      color: #155724;
+      display: block;
+    }
+
+    .message.error {
+      background: #f8d7da;
+      color: #721c24;
+      display: block;
+    }
+  </style>
+</head>
+<body>
+  <!-- Top Navigation (from admin-dashboard) -->
+  <nav class="top-nav">
+    <div class="nav-container">
+      <div class="nav-left">
+        <h2>Admin - Reservation Approvals</h2>
+      </div>
+      <div class="nav-right">
+        <a href="admin-dashboard.html" class="nav-link">
+          <i data-feather="grid"></i>
+          <span>Dashboard</span>
+        </a>
+        <a href="admin-sitin.html" class="nav-link">
+          <i data-feather="play-circle"></i>
+          <span>Initiate Session</span>
+        </a>
+        <button onclick="logout()" class="btn-logout">
+          <i data-feather="log-out"></i>
+          <span>Logout</span>
+        </button>
+      </div>
+    </div>
+  </nav>
+
+  <div class="approval-container">
+    <div class="page-header">
+      <h1>Pending Reservations</h1>
+      <button class="refresh-btn" onclick="loadReservations()">
+        <i data-feather="refresh-cw"></i>
+        Refresh
+      </button>
+    </div>
+
+    <!-- Message -->
+    <div id="messageContainer" class="message"></div>
+
+    <!-- Filters -->
+    <div class="filters">
+      <button class="filter-btn active" onclick="filterReservations('pending')">
+        Pending <span id="pendingCount">0</span>
+      </button>
+      <button class="filter-btn" onclick="filterReservations('all')">All</button>
+    </div>
+
+    <!-- Reservations Container -->
+    <div id="reservationsContainer"></div>
+  </div>
+
+  <!-- Rejection Modal -->
+  <div id="rejectModal" class="modal">
+    <div class="modal-content">
+      <div class="modal-header">Reject Reservation</div>
+      <form onsubmit="submitRejection(event)">
+        <div class="form-group">
+          <label>Rejection Reason:</label>
+          <textarea id="rejectionReason" placeholder="Explain why the reservation is being rejected..." required></textarea>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn-modal btn-modal-cancel" onclick="closeRejectModal()">Cancel</button>
+          <button type="submit" class="btn-modal btn-modal-reject">Reject</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <script>
+    // Check admin auth
+    const user = JSON.parse(sessionStorage.getItem('user') || 'null');
+    if (!user || user.role !== 'admin') {
+      window.location.href = 'index.html';
+    }
+
+    let currentFilter = 'pending';
+    let pendingReservations = [];
+    let selectedReject = null;
+
+    document.addEventListener('DOMContentLoaded', () => {
+      loadReservations();
+      feather.replace();
+    });
+
+    async function loadReservations() {
+      const container = document.getElementById('reservationsContainer');
+      container.innerHTML = '<div class="loading-state"><div class="loading-spinner"></div><p>Loading reservations...</p></div>';
+
+      try {
+        const response = await fetch('api-admin-get-all-reservations.php');
+        const data = await response.json();
+
+        if (!data.success) {
+          container.innerHTML = `<div class="empty-state"><h3>Error</h3><p>${data.message}</p></div>`;
+          return;
+        }
+
+        pendingReservations = data.reservations;
+        document.getElementById('pendingCount').textContent = `(${data.pending_count || 0})`;
+
+        displayReservations(currentFilter);
+      } catch (error) {
+        console.error('Error:', error);
+        container.innerHTML = '<div class="empty-state"><h3>Error</h3><p>Failed to load reservations</p></div>';
+      }
+    }
+
+    function filterReservations(filter) {
+      currentFilter = filter;
+      document.querySelectorAll('.filter-btn').forEach(btn => btn.classList.remove('active'));
+      event.target.classList.add('active');
+      displayReservations(filter);
+    }
+
+    function displayReservations(filter) {
+      const container = document.getElementById('reservationsContainer');
+
+      let toDisplay = pendingReservations;
+      if (filter === 'pending') {
+        toDisplay = pendingReservations.filter(r => r.status === 'pending');
+      }
+
+      if (toDisplay.length === 0) {
+        container.innerHTML = `<div class="empty-state"><i data-feather="inbox"></i><h3>No reservations</h3><p>${filter === 'pending' ? 'All reservations have been processed!' : 'No reservations found'}</p></div>`;
+        feather.replace();
+        return;
+      }
+
+      let html = '<div class="reservation-grid">';
+      toDisplay.forEach(res => {
+        const dateObj = new Date(res.requested_date);
+        const dateStr = dateObj.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
+        const timeStr = res.requested_time.slice(0, 5);
+        const initials = res.first_name.charAt(0) + res.last_name.charAt(0);
+
+        let actions = '';
+        if (res.status === 'pending') {
+          actions = `
+            <div class="action-buttons">
+              <button class="btn-approve" onclick="approveReservation(${res.id})">Approve</button>
+              <button class="btn-reject" onclick="openRejectModal(${res.id})">Reject</button>
+            </div>
+          `;
+        } else {
+          actions = `<div style="text-align: center; padding: 15px; color: #999; font-size: 14px;">Status: ${res.status.toUpperCase()}</div>`;
+        }
+
+        html += `
+          <div class="reservation-card">
+            <div class="card-student-info">
+              <div class="student-avatar">${initials}</div>
+              <div class="student-details">
+                <div class="student-name">${res.first_name} ${res.last_name}</div>
+                <div class="student-id">${res.id_number}</div>
+              </div>
+              <span class="status-badge status-${res.status}">${res.status}</span>
+            </div>
+
+            <div class="card-details">
+              <div class="detail-row">
+                <span class="detail-label">Computer:</span>
+                <span class="detail-value">${res.computer_number}</span>
+              </div>
+              <div class="detail-row">
+                <span class="detail-label">Date:</span>
+                <span class="detail-value">${dateStr}</span>
+              </div>
+              <div class="detail-row">
+                <span class="detail-label">Time:</span>
+                <span class="detail-value">${timeStr}</span>
+              </div>
+              <div class="detail-row">
+                <span class="detail-label">Duration:</span>
+                <span class="detail-value">${res.duration_hours} hour(s)</span>
+              </div>
+              <div class="detail-row">
+                <span class="detail-label">Purpose:</span>
+                <span class="detail-value">${res.purpose}</span>
+              </div>
+            </div>
+
+            ${actions}
+          </div>
+        `;
+      });
+      html += '</div>';
+
+      container.innerHTML = html;
+      feather.replace();
+    }
+
+    async function approveReservation(reservationId) {
+      if (!confirm('Approve this reservation?')) return;
+
+      try {
+        const response = await fetch('api-approve-reservation.php', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ reservation_id: reservationId })
+        });
+
+        const data = await response.json();
+
+        if (data.success) {
+          showMessage('Reservation approved', 'success');
+          setTimeout(() => loadReservations(), 1000);
+        } else {
+          showMessage(data.message, 'error');
+        }
+      } catch (error) {
+        showMessage('Error approving reservation', 'error');
+      }
+    }
+
+    function openRejectModal(reservationId) {
+      selectedReject = reservationId;
+      document.getElementById('rejectModal').classList.add('show');
+    }
+
+    function closeRejectModal() {
+      document.getElementById('rejectModal').classList.remove('show');
+      document.getElementById('rejectionReason').value = '';
+      selectedReject = null;
+    }
+
+    async function submitRejection(event) {
+      event.preventDefault();
+
+      const reason = document.getElementById('rejectionReason').value;
+
+      try {
+        const response = await fetch('api-reject-reservation.php', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            reservation_id: selectedReject,
+            rejection_reason: reason
+          })
+        });
+
+        const data = await response.json();
+
+        if (data.success) {
+          showMessage('Reservation rejected', 'success');
+          closeRejectModal();
+          setTimeout(() => loadReservations(), 1000);
+        } else {
+          showMessage(data.message, 'error');
+        }
+      } catch (error) {
+        showMessage('Error rejecting reservation', 'error');
+      }
+    }
+
+    function showMessage(message, type) {
+      const container = document.getElementById('messageContainer');
+      container.textContent = message;
+      container.className = `message ${type}`;
+      setTimeout(() => { container.className = 'message'; }, 5000);
+    }
+
+    function logout() {
+      fetch('logout.php', { method: 'POST' })
+        .then(() => {
+          sessionStorage.removeItem('user');
+          window.location.href = 'index.html';
+        });
+    }
+  </script>
+</body>
+</html>

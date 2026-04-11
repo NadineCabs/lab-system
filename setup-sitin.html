@@ -1,0 +1,351 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sit-In System Setup - CCS Monitoring System</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #703081 0%, #9400D3 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        .setup-container {
+            background: white;
+            border-radius: 16px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            max-width: 600px;
+            width: 100%;
+            overflow: hidden;
+        }
+
+        .setup-header {
+            background: linear-gradient(135deg, #703081 0%, #9400D3 100%);
+            color: white;
+            padding: 40px;
+            text-align: center;
+        }
+
+        .setup-header h1 {
+            font-size: 28px;
+            margin-bottom: 8px;
+        }
+
+        .setup-header p {
+            font-size: 14px;
+            opacity: 0.95;
+        }
+
+        .setup-content {
+            padding: 40px;
+        }
+
+        .setup-step {
+            margin-bottom: 24px;
+        }
+
+        .step-title {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-size: 16px;
+            font-weight: 600;
+            color: #1a1a1a;
+            margin-bottom: 12px;
+        }
+
+        .step-number {
+            width: 32px;
+            height: 32px;
+            background: linear-gradient(135deg, #703081 0%, #9400D3 100%);
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            flex-shrink: 0;
+        }
+
+        .step-description {
+            font-size: 14px;
+            color: #666;
+            margin-bottom: 8px;
+            margin-left: 44px;
+        }
+
+        .btn-setup {
+            width: 100%;
+            padding: 14px;
+            background: linear-gradient(135deg, #703081 0%, #9400D3 100%);
+            color: white;
+            border: none;
+            border-radius: 10px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            box-shadow: 0 4px 12px rgba(112, 48, 129, 0.3);
+            margin-left: 44px;
+        }
+
+        .btn-setup:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(112, 48, 129, 0.4);
+        }
+
+        .btn-setup:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .status-message {
+            margin-left: 44px;
+            margin-top: 12px;
+            padding: 12px;
+            border-radius: 8px;
+            font-size: 13px;
+            display: none;
+        }
+
+        .status-message.success {
+            display: block;
+            background: rgba(76, 175, 80, 0.1);
+            color: #4caf50;
+            border: 1px solid rgba(76, 175, 80, 0.3);
+        }
+
+        .status-message.error {
+            display: block;
+            background: rgba(244, 67, 54, 0.1);
+            color: #f44336;
+            border: 1px solid rgba(244, 67, 54, 0.3);
+        }
+
+        .status-message.loading {
+            display: block;
+            background: rgba(77, 166, 255, 0.1);
+            color: #4da6ff;
+            border: 1px solid rgba(77, 166, 255, 0.3);
+        }
+
+        .spinner {
+            display: inline-block;
+            width: 14px;
+            height: 14px;
+            border: 2px solid currentColor;
+            border-top-color: transparent;
+            border-radius: 50%;
+            animation: spin 0.6s linear infinite;
+            margin-right: 8px;
+            vertical-align: middle;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        .setup-footer {
+            background: #f5f7fa;
+            padding: 20px 40px;
+            text-align: center;
+            border-top: 1px solid #e0e0e0;
+        }
+
+        .setup-footer a {
+            color: #703081;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 14px;
+        }
+
+        .setup-footer a:hover {
+            opacity: 0.8;
+        }
+
+        .success-icon {
+            width: 60px;
+            height: 60px;
+            background: rgba(76, 175, 80, 0.1);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #4caf50;
+            margin: 0 auto 20px;
+            font-size: 32px;
+        }
+
+        .final-message {
+            text-align: center;
+            display: none;
+        }
+
+        .final-message h2 {
+            color: #4caf50;
+            font-size: 24px;
+            margin-bottom: 12px;
+        }
+
+        .final-message p {
+            color: #666;
+            font-size: 14px;
+            margin-bottom: 24px;
+        }
+
+        .btn-continue {
+            display: inline-block;
+            padding: 12px 28px;
+            background: linear-gradient(135deg, #703081 0%, #9400D3 100%);
+            color: white;
+            text-decoration: none;
+            border-radius: 10px;
+            font-weight: 600;
+            transition: all 0.3s;
+        }
+
+        .btn-continue:hover {
+            transform: translateY(-2px);
+        }
+    </style>
+</head>
+<body>
+    <div class="setup-container">
+        <div class="setup-header">
+            <h1>Sit-In System Setup</h1>
+            <p>Initialize database for sit-in session management</p>
+        </div>
+
+        <div class="setup-content" id="setupContent">
+            <div class="setup-step">
+                <div class="step-title">
+                    <div class="step-number">1</div>
+                    <span>Database Initialization</span>
+                </div>
+                <p class="step-description">This will create the required database tables and columns for the sit-in session management system.</p>
+                <button class="btn-setup" onclick="initializeDatabase()">Initialize Database</button>
+                <div class="status-message" id="initStatus"></div>
+            </div>
+
+            <div class="setup-step" id="verifyStep" style="display: none;">
+                <div class="step-title">
+                    <div class="step-number">2</div>
+                    <span>Verification</span>
+                </div>
+                <p class="step-description">Verifying all components are installed correctly.</p>
+                <button class="btn-setup" onclick="verifySetup()" id="verifyBtn">Verify Setup</button>
+                <div class="status-message" id="verifyStatus"></div>
+            </div>
+
+            <div id="finalMessage" class="final-message">
+                <div class="success-icon">✓</div>
+                <h2>Setup Complete!</h2>
+                <p>The sit-in session management system is ready to use.</p>
+                <a href="admin-dashboard.html" class="btn-continue">Go to Admin Dashboard</a>
+            </div>
+        </div>
+
+        <div class="setup-footer">
+            <p>For more information, see <a href="SIT_IN_SETUP_GUIDE.md" target="_blank">Setup Guide</a></p>
+        </div>
+    </div>
+
+    <script>
+        async function initializeDatabase() {
+            const statusEl = document.getElementById('initStatus');
+            const btn = event.target;
+
+            btn.disabled = true;
+            statusEl.className = 'status-message loading';
+            statusEl.innerHTML = '<span class="spinner"></span>Initializing database...';
+
+            try {
+                const response = await fetch('init-database.php');
+                const text = await response.text();
+
+                if (response.ok) {
+                    statusEl.className = 'status-message success';
+                    statusEl.textContent = '✓ Database initialized successfully!';
+                    
+                    // Show verification step
+                    setTimeout(() => {
+                        document.getElementById('verifyStep').style.display = 'block';
+                    }, 1000);
+                } else {
+                    throw new Error('Server returned error status');
+                }
+            } catch (error) {
+                statusEl.className = 'status-message error';
+                statusEl.textContent = '✕ Error: ' + error.message;
+                btn.disabled = false;
+            }
+        }
+
+        async function verifySetup() {
+            const statusEl = document.getElementById('verifyStatus');
+            const btn = document.getElementById('verifyBtn');
+
+            btn.disabled = true;
+            statusEl.className = 'status-message loading';
+            statusEl.innerHTML = '<span class="spinner"></span>Verifying setup...';
+
+            try {
+                // Check if admin pages load
+                const pages = ['admin-sitin.html', 'admin-records.html'];
+                let allOk = true;
+
+                for (const page of pages) {
+                    const response = await fetch(page);
+                    if (!response.ok) {
+                        allOk = false;
+                        break;
+                    }
+                }
+
+                if (allOk) {
+                    statusEl.className = 'status-message success';
+                    statusEl.textContent = '✓ All components verified!';
+                    
+                    // Show final message
+                    setTimeout(() => {
+                        document.getElementById('setupContent').innerHTML = '';
+                        document.getElementById('finalMessage').style.display = 'block';
+                    }, 1500);
+                } else {
+                    throw new Error('Some pages are not accessible');
+                }
+            } catch (error) {
+                statusEl.className = 'status-message error';
+                statusEl.textContent = '✕ Verification failed: ' + error.message;
+                btn.disabled = false;
+            }
+        }
+
+        // Check if already initialized
+        window.addEventListener('load', async () => {
+            try {
+                const response = await fetch('get-active-sitions.php');
+                if (response.ok) {
+                    // Already initialized
+                    document.getElementById('setupContent').innerHTML = '';
+                    document.getElementById('finalMessage').style.display = 'block';
+                }
+            } catch (error) {
+                // Not initialized yet, show setup
+            }
+        });
+    </script>
+</body>
+</html>

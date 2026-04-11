@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Sit-In Records - CCS Sit-In Monitoring System</title>
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&display=swap" rel="stylesheet"/>
+  <link rel="stylesheet" href="css/admin-style.css">
+  <script src="https://unpkg.com/feather-icons"></script>
+</head>
+<body>
+
+  <!-- Sidebar -->
+  <aside class="sidebar" id="sidebar">
+    <div class="sidebar-header">
+      <div class="logo-section">
+        <div class="logo-icon">
+          <img src="ccslogo.png" alt="CCS Logo">
+        </div>
+        <div class="logo-text">
+          <h3>CompLog</h3>
+          <p>Admin Panel</p>
+        </div>
+      </div>
+      <button class="sidebar-toggle" id="sidebarToggle">
+        <i data-feather="x"></i>
+      </button>
+    </div>
+
+    <nav class="sidebar-nav">
+      <a href="admin-dashboard.html" class="nav-item">
+        <i data-feather="home"></i>
+        <span>Dashboard</span>
+      </a>
+      <a href="admin-sitin.html" class="nav-item">
+        <i data-feather="log-in"></i>
+        <span>Sit-In</span>
+      </a>
+      <a href="admin-students.html" class="nav-item">
+        <i data-feather="users"></i>
+        <span>Students</span>
+      </a>
+      <a href="admin-records.html" class="nav-item active">
+        <i data-feather="book"></i>
+        <span>Sit-In Records</span>
+      </a>
+      <a href="admin-reports.html" class="nav-item">
+        <i data-feather="bar-chart-2"></i>
+        <span>Reports</span>
+      </a>
+      <div class="nav-divider"></div>
+      <a href="admin-users.html" class="nav-item">
+        <i data-feather="user-check"></i>
+        <span>User Management</span>
+      </a>
+      <a href="admin-logs.html" class="nav-item">
+        <i data-feather="activity"></i>
+        <span>Activity Logs</span>
+      </a>
+      <a href="admin-announcements.html" class="nav-item">
+        <i data-feather="bell"></i>
+        <span>Announcements</span>
+      </a>
+      <a href="admin-feedback.html" class="nav-item">
+        <i data-feather="message-circle"></i>
+        <span>Feedback</span>
+      </a>
+      <a href="admin-settings.html" class="nav-item">
+        <i data-feather="settings"></i>
+        <span>Settings</span>
+      </a>
+    </nav>
+
+    <div class="sidebar-footer">
+      <div class="user-info">
+        <div class="user-avatar">
+          <i data-feather="user"></i>
+        </div>
+        <div class="user-details">
+          <p class="user-name">Admin User</p>
+          <p class="user-role">Administrator</p>
+        </div>
+      </div>
+    </div>
+  </aside>
+
+  <!-- Main Content -->
+  <div class="main-content">
+    <!-- Top Navbar -->
+    <header class="top-navbar">
+      <button class="mobile-toggle" id="mobileToggle">
+        <i data-feather="menu"></i>
+      </button>
+      <div class="navbar-search">
+        <i data-feather="search"></i>
+        <input type="text" placeholder="Search records..." id="globalSearch">
+      </div>
+      <div class="navbar-right">
+        <button class="icon-btn" id="notificationBtn">
+          <i data-feather="bell"></i>
+          <span class="badge">3</span>
+        </button>
+        <div class="user-menu">
+          <button class="user-btn" id="userMenuBtn">
+            <img src="ccslogo.png" alt="Admin" class="user-img">
+            <span class="user-name-nav">Admin</span>
+            <i data-feather="chevron-down"></i>
+          </button>
+          <div class="user-dropdown" id="userDropdown">
+            <a href="#"><i data-feather="user"></i> Profile</a>
+            <a href="#"><i data-feather="settings"></i> Settings</a>
+            <div class="dropdown-divider"></div>
+            <a href="logout.php" class="logout-btn"><i data-feather="log-out"></i> Logout</a>
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <!-- Content Wrapper -->
+    <div class="content-wrapper">
+      <!-- Page Header -->
+      <div class="page-header">
+        <div>
+          <h1>Sit-In Records</h1>
+          <p>View and manage all completed sit-in sessions</p>
+        </div>
+        <button class="btn-primary" id="exportBtn">
+          <i data-feather="download"></i>
+          Export Data
+        </button>
+      </div>
+
+      <!-- Filters Card -->
+      <div class="card" style="margin-bottom: 24px;">
+        <div class="card-header">
+          <h3><i data-feather="filter"></i> Filters</h3>
+        </div>
+        <div class="card-body">
+          <div class="form-row">
+            <div class="form-group">
+              <label for="filterStudent">Filter by Student</label>
+              <input 
+                type="text" 
+                id="filterStudent" 
+                class="form-control"
+                placeholder="Enter student name or ID"
+              >
+            </div>
+            <div class="form-group">
+              <label for="filterStartDate">Start Date</label>
+              <input 
+                type="date" 
+                id="filterStartDate" 
+                class="form-control"
+              >
+            </div>
+            <div class="form-group">
+              <label for="filterEndDate">End Date</label>
+              <input 
+                type="date" 
+                id="filterEndDate" 
+                class="form-control"
+              >
+            </div>
+            <div class="form-group" style="align-self: flex-end;">
+              <button type="button" class="btn-secondary" id="applyFiltersBtn">
+                <i data-feather="search"></i> Apply Filters
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Records Table Card -->
+      <div class="card">
+        <div class="card-header">
+          <h3><i data-feather="book"></i> Session Records</h3>
+          <span style="font-size: 14px; color: #666;">
+            Total: <span id="recordsCount">0</span> records
+          </span>
+        </div>
+        <div class="card-body">
+          <div class="table-responsive">
+            <table class="students-table" id="recordsTable">
+              <thead>
+                <tr>
+                  <th>Date & Time</th>
+                  <th>Student ID</th>
+                  <th>Name</th>
+                  <th>Course</th>
+                  <th>Computer</th>
+                  <th>Duration (mins)</th>
+                  <th>Purpose</th>
+                </tr>
+              </thead>
+              <tbody id="recordsTableBody">
+                <tr>
+                  <td colspan="7" style="text-align: center; padding: 40px;">
+                    <div class="spinner" style="margin: 0 auto 16px;"></div>
+                    <p>Loading records...</p>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
+          <!-- Pagination -->
+          <div style="margin-top: 20px; display: flex; justify-content: space-between; align-items: center;">
+            <span id="paginationInfo" style="font-size: 13px; color: #666;"></span>
+            <div style="display: flex; gap: 8px;">
+              <button type="button" class="btn-secondary" id="prevPageBtn">
+                <i data-feather="chevron-left"></i> Previous
+              </button>
+              <button type="button" class="btn-secondary" id="nextPageBtn">
+                Next <i data-feather="chevron-right"></i>
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="js/admin-script.js"></script>
+  <script src="js/sitin-records.js"></script>
+  <script>
+    feather.replace();
+  </script>
+</body>
+</html>

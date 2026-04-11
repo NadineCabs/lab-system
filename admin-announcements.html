@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Admin Announcements - CCS Sit-In Monitoring System</title>
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&display=swap" rel="stylesheet"/>
+  <link rel="stylesheet" href="css/admin-style.css">
+  <script src="https://unpkg.com/feather-icons"></script>
+</head>
+<body>
+  <aside class="sidebar" id="sidebar">
+    <div class="sidebar-header">
+      <div class="logo-section">
+        <div class="logo-icon">
+          <img src="ccslogo.png" alt="CCS Logo">
+        </div>
+        <div class="logo-text">
+          <h3>CompLog</h3>
+          <p>Admin Panel</p>
+        </div>
+      </div>
+      <button class="sidebar-toggle" id="sidebarToggle">
+        <i data-feather="x"></i>
+      </button>
+    </div>
+
+    <nav class="sidebar-nav">
+      <a href="admin-dashboard.html" class="nav-item">
+        <i data-feather="home"></i>
+        <span>Dashboard</span>
+      </a>
+      <a href="admin-sitin.html" class="nav-item">
+        <i data-feather="log-in"></i>
+        <span>Sit-In</span>
+      </a>
+      <a href="admin-students.html" class="nav-item">
+        <i data-feather="users"></i>
+        <span>Students</span>
+      </a>
+      <a href="admin-records.html" class="nav-item">
+        <i data-feather="book"></i>
+        <span>Sit-In Records</span>
+      </a>
+      <a href="admin-reports.html" class="nav-item">
+        <i data-feather="bar-chart-2"></i>
+        <span>Reports</span>
+      </a>
+      <div class="nav-divider"></div>
+      <a href="admin-users.html" class="nav-item">
+        <i data-feather="user-check"></i>
+        <span>User Management</span>
+      </a>
+      <a href="admin-logs.html" class="nav-item">
+        <i data-feather="activity"></i>
+        <span>Activity Logs</span>
+      </a>
+      <a href="admin-announcements.html" class="nav-item active">
+        <i data-feather="bell"></i>
+        <span>Announcements</span>
+      </a>
+      <a href="admin-feedback.html" class="nav-item">
+        <i data-feather="message-circle"></i>
+        <span>Feedback</span>
+      </a>
+      <a href="admin-settings.html" class="nav-item">
+        <i data-feather="settings"></i>
+        <span>Settings</span>
+      </a>
+    </nav>
+
+    <div class="sidebar-footer">
+      <div class="user-info">
+        <div class="user-avatar">
+          <i data-feather="user"></i>
+        </div>
+        <div class="user-details">
+          <p class="user-name">Admin User</p>
+          <p class="user-role">Administrator</p>
+        </div>
+      </div>
+    </div>
+  </aside>
+
+  <div class="main-content">
+    <header class="top-navbar">
+      <button class="mobile-toggle" id="mobileToggle">
+        <i data-feather="menu"></i>
+      </button>
+      <div class="navbar-search">
+        <i data-feather="search"></i>
+        <input type="text" placeholder="Search students, records..." id="globalSearch">
+      </div>
+      <div class="navbar-right">
+        <button class="icon-btn" id="notificationBtn">
+          <i data-feather="bell"></i>
+          <span class="badge">3</span>
+        </button>
+        <div class="user-menu">
+          <button class="user-btn" id="userMenuBtn">
+            <img src="ccslogo.png" alt="Admin" class="user-img">
+            <span class="user-name-nav">Admin</span>
+            <i data-feather="chevron-down"></i>
+          </button>
+          <div class="user-dropdown" id="userDropdown">
+            <a href="#"><i data-feather="user"></i> Profile</a>
+            <a href="#"><i data-feather="settings"></i> Settings</a>
+            <div class="dropdown-divider"></div>
+            <a href="#" class="logout-btn"><i data-feather="log-out"></i> Logout</a>
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <div class="content-wrapper">
+      <div class="page-header">
+        <div>
+          <h1>Announcements</h1>
+          <p>Create a new announcement for all students and review existing posts.</p>
+        </div>
+      </div>
+
+      <div class="card" style="margin-bottom: 24px;">
+        <div class="card-header">
+          <h3><i data-feather="edit-3"></i> New Announcement</h3>
+        </div>
+        <div class="card-body">
+          <form id="announcementForm">
+            <div class="form-row">
+              <div class="form-group" style="width: 100%; margin-bottom: 16px;">
+                <label for="announcementTitle">Title</label>
+                <input type="text" id="announcementTitle" name="title" class="form-control" placeholder="Announcement title" required>
+              </div>
+            </div>
+            <div class="form-row">
+              <div class="form-group" style="width: 100%; margin-bottom: 16px;">
+                <label for="announcementContent">Content</label>
+                <textarea id="announcementContent" name="content" class="form-control" rows="5" placeholder="Share important updates with students" required></textarea>
+              </div>
+            </div>
+            <div class="form-row" style="display: flex; gap: 12px; align-items: center; flex-wrap: wrap;">
+              <button type="submit" class="btn-primary">Publish Announcement</button>
+              <button type="button" class="btn-secondary" id="clearAnnouncementForm">Clear</button>
+            </div>
+            <div id="announcementStatus" style="margin-top: 16px; font-size: 14px;"></div>
+          </form>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-header">
+          <h3><i data-feather="bell"></i> Recent Announcements</h3>
+        </div>
+        <div class="announcements-list" id="adminAnnouncementsList">
+          <div class="announcement-item">
+            <div class="announcement-header">
+              <span class="announcement-date">Loading announcements...</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="js/admin-script.js"></script>
+  <script>
+    feather.replace();
+  </script>
+</body>
+</html>

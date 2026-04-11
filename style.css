@@ -19,15 +19,8 @@
   --nav-height: 68px;
 }
 
-@font-face {
-    font-family: 'Chopin';
-    src: url('fonts/Chopin-Trial-Bold-BF65b1d691a55be.otf') format('opentype');
-    font-weight: normal;
-    font-style: normal;
-}
-
 body {
-  font-family: 'Chopin', sans-serif;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
   min-height: 100vh;
   overflow-x: hidden;
   line-height: 1.4;
@@ -106,7 +99,7 @@ nav {
 }
 
 .brand-title {
-  font-family: 'Chopin', sans-serif;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
   font-weight: 700;
   font-size: 15px;
   color: #fff;
@@ -131,7 +124,7 @@ nav {
 }
 
 .nav-links a {
-  font-family: 'Chopin', sans-serif;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
   font-size: 14px;
   font-weight: 500;
   color: var(--nav-muted);
@@ -230,7 +223,7 @@ nav {
 }
 
 .btn-nav-login {
-  font-family: 'Chopin', sans-serif;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
   font-size: 14px;
   font-weight: 500;
   color: var(--nav-muted);
@@ -251,7 +244,7 @@ nav {
 }
 
 .btn-nav-register {
-  font-family: 'Chopin', sans-serif;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
   font-size: 14px;
   font-weight: 600;
   color: #fff;
@@ -400,18 +393,6 @@ nav {
   display: inline-block;
   overflow: visible;
   border-radius: 10px;
-}
-
-.ccs-logo-wrapper::after {
-  content: '';
-  position: absolute;
-  top: -50%; 
-  left: -50%;
-  width: 200%; 
-  height: 200%;
-  background: linear-gradient(45deg, transparent 40%, rgba(255,255,255,0.4) 50%, transparent 60%);
-  animation: shimmer 3s infinite;
-  pointer-events: none;
 }
 
 .ccs-logo {
@@ -602,7 +583,7 @@ input[type="password"],
   transition: all 0.3s ease;
   outline: none;
   color: #333;
-  font-family: 'Chopin', sans-serif;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }
 
 /* Add placeholder for floating label effect */
@@ -810,3 +791,196 @@ input[type="password"]:focus,
   .form-title { font-size: 26px; }
   .left-title { white-space: normal; }
 };
+
+/* ============================================
+   TOAST NOTIFICATIONS (Top Right)
+   ============================================ */
+ 
+/* Toast Container - Top Right Position */
+.toast-container {
+  position: fixed !important;
+  top: 20px !important;
+  right: 20px !important;
+  bottom: auto !important;
+  left: auto !important;
+  z-index: 9999 !important;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  max-width: 400px;
+  pointer-events: none;
+}
+ 
+/* Individual Toast */
+.toast {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 14px 18px;
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  font-size: 14px;
+  font-weight: 500;
+  min-width: 300px;
+  max-width: 400px;
+  pointer-events: auto;
+  transform: translateX(400px);
+  opacity: 0;
+  transition: all 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+  position: relative;
+}
+ 
+/* Toast Show Animation */
+.toast.show {
+  transform: translateX(0);
+  opacity: 1;
+}
+ 
+/* Toast Hide Animation */
+.toast.hide {
+  transform: translateX(400px);
+  opacity: 0;
+}
+ 
+/* Toast Icon */
+.toast-icon {
+  flex-shrink: 0;
+  width: 20px;
+  height: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+ 
+.toast-icon svg {
+  width: 100%;
+  height: 100%;
+}
+ 
+/* Toast Content */
+.toast-content {
+  flex: 1;
+  line-height: 1.4;
+}
+ 
+/* Toast Close Button */
+.toast-close {
+  flex-shrink: 0;
+  width: 20px;
+  height: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  opacity: 0.6;
+  transition: opacity 0.2s;
+  background: none;
+  border: none;
+  padding: 0;
+}
+ 
+.toast-close:hover {
+  opacity: 1;
+}
+ 
+.toast-close svg {
+  width: 16px;
+  height: 16px;
+}
+ 
+/* Success Toast - Cyan/Teal */
+.toast.success {
+  background: #E0F7F4;
+  border: 2px solid #4FD1C5;
+  color: #234E52;
+}
+ 
+.toast.success .toast-icon {
+  color: #4FD1C5;
+}
+ 
+.toast.success .toast-close {
+  color: #4FD1C5;
+}
+ 
+/* Error Toast - Pink/Red */
+.toast.error {
+  background: #FCE4EC;
+  border: 2px solid #F48FB1;
+  color: #880E4F;
+}
+ 
+.toast.error .toast-icon {
+  color: #F48FB1;
+}
+ 
+.toast.error .toast-close {
+  color: #F48FB1;
+}
+ 
+/* Warning Toast - Orange/Yellow */
+.toast.warning {
+  background: #FFF3E0;
+  border: 2px solid #FFB74D;
+  color: #E65100;
+}
+ 
+.toast.warning .toast-icon {
+  color: #FFB74D;
+}
+ 
+.toast.warning .toast-close {
+  color: #FFB74D;
+}
+ 
+/* Info Toast - Blue */
+.toast.info {
+  background: #E1F5FE;
+  border: 2px solid #4FC3F7;
+  color: #01579B;
+}
+ 
+.toast.info .toast-icon {
+  color: #4FC3F7;
+}
+ 
+.toast.info .toast-close {
+  color: #4FC3F7;
+}
+ 
+/* Progress Bar at Bottom */
+.toast-progress {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  height: 4px;
+  background: currentColor;
+  opacity: 0.3;
+  border-radius: 0 0 12px 12px;
+  animation: toastProgress 5s linear forwards;
+}
+ 
+@keyframes toastProgress {
+  from {
+    width: 100%;
+  }
+  to {
+    width: 0%;
+  }
+}
+ 
+/* Responsive Toast */
+@media (max-width: 480px) {
+  .toast-container {
+    top: 10px;
+    right: 10px;
+    left: 10px;
+    max-width: none;
+  }
+  
+  .toast {
+    min-width: auto;
+    max-width: none;
+  }
+}
